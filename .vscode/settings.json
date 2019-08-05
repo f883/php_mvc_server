@@ -1,0 +1,7 @@
+{
+    "phpformatter.composer": true,
+    "phpformatter.arguments": [
+        "--level=psr2",
+        "--fixers=linefeed,short_tag,indentation"
+    ]
+}

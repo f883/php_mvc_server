@@ -1,9 +1,9 @@
 <?php
 
-require_once "GetGameController.php";
-require_once "ChangeGameController.php";
-require_once "AddGameController.php";
-require_once "Router.php";
+require_once "src/GetGameController.php";
+require_once "src/ChangeGameController.php";
+require_once "src/AddGameController.php";
+require_once "src/Router.php";
 
 $router = new Router();
 

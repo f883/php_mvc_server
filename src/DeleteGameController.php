@@ -3,14 +3,14 @@
 require_once "IController.php";
 require_once "GameModel.php";
 
-class GetGameController implements IController{
+class DeleteGameController implements IController{
     public static function execute($path, $params, $data = []){
         $id = explode('/', $path)[2];
-        $res = GameModel::getGame($id);
+        $res = GameModel::deleteGame($id);
 
         header('Content-Type: application/json');
         if ($res){
-            http_response_code(200);
+            http_response_code(202);
             echo json_encode($res);
         }
         else{

@@ -5,10 +5,11 @@ require_once "GameModel.php";
 
 class AddGameController implements IController{
     public static function execute($path, $params, $data = []){
-        // $datae = [
-        //     'name' => 'hl 228'
-        // ];
-        // var_dump($data);
-        echo GameModel::addGame($data);
+        $id = GameModel::addGame($data);
+        header('Content-Type: application/json');
+        http_response_code(201);
+        echo json_encode([
+            "id" => $id
+        ]);
     } 
 }

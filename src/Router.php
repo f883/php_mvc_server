@@ -44,7 +44,7 @@ class Router{
         
         $controllerFound = false;
         foreach ($this->routes as $route){
-            // echo $route['regexp'] . " " . $path . "\n";
+            //echo $route['regexp'] . " " . $path . "\n";
             if (preg_match($route['regexp'], $path) === 1){
                 if ($route['method'] === strtoupper($method)){
                     $controllerFound = true;
@@ -55,9 +55,8 @@ class Router{
         }
 
         if (!$controllerFound){
-            header("404 Not Found");
-            echo "404 not found.";
-            throw new Exception('Controller not found.');
+            http_response_code(404);
+            echo "Url not found.";
         }
     }
 

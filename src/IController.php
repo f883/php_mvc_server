@@ -1,5 +1,6 @@
 <?php 
 
 interface IController{
-    public static function execute($path, $params, $data = []); 
+    public function execute($path, $params, $data = []); 
+    public function __construct($model);
 }

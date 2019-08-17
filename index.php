@@ -3,29 +3,48 @@
 // TODO: поставить xdebug
 // TODO: code sniffer
 
-require_once "src/GetGameController.php";
-require_once "src/ChangeGameController.php";
-require_once "src/AddGameController.php";
-require_once "src/DeleteGameController.php";
+// TODO: посмотреть реализацию slim
+// почитать про data transfer object
+
+// refactoring.guru 
+// описание паттернов с примерами
+
+// uncle bob // роберт мартин?
+
+
 require_once "src/Router.php";
+require_once 'src/Storage.php';
 
-$router = new Router();
 
-$router->addRoute('get', '/game\/\d+/', 'GetGameController');
-$router->addRoute('put', '/game\/\d+/', 'ChangeGameController');
-$router->addRoute('post', '/game/', 'AddGameController');
-$router->addRoute('delete', '/game\/\d+/', 'DeleteGameController');
+$app = new app();
+$app->run();
 
-$url = $_SERVER['REQUEST_URI'];
-$method = $_SERVER['REQUEST_METHOD'];
-$data = file_get_contents('php://input');
+class app{
+    private $router;
+    private $storage;
 
-// error_log(print_r($url, TRUE));
-// error_log(print_r($method, TRUE));
-// error_log(print_r($data, TRUE));
+    public function run(){
+        $this->router = new Router();
+        $store = new Storage();
+        $this->storage = $store->data;
 
-// $url = '/game/123?sgf=23&tes=set';
-// $method = "get";
-// $data = [];
+        $this->router->addRoute('get', '/game\/\d+/', $this->storage['GetGameController']);
+        $this->router->addRoute('put', '/game\/\d+/', $this->storage['ChangeGameController']);
+        $this->router->addRoute('post', '/game/', $this->storage['AddGameController']);
+        $this->router->addRoute('delete', '/game\/\d+/', $this->storage['DeleteGameController']);
+    
+        $url = $_SERVER['REQUEST_URI'];
+        $method = $_SERVER['REQUEST_METHOD'];
+        $data = file_get_contents('php://input');
 
-$router->dispatch($method, $url, $data);
+        // error_log(print_r($url, TRUE));
+        // error_log(print_r($method, TRUE));
+        // error_log(print_r($data, TRUE));
+
+        // $url = '/game/4'; 
+        // $method = "put";
+        // $data = '{"name":"test_4_game"}';
+
+        $this->router->dispatch($method, $url, $data);
+    }
+}

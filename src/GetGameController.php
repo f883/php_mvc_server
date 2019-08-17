@@ -1,14 +1,19 @@
 <?php
 
 require_once "IController.php";
-require_once "GameModel.php";
 
 class GetGameController implements IController
 {
-    public static function execute($path, $params, $data = [])
+    private $model;
+    
+    public function __construct($model){
+        $this->model = $model;
+    }
+
+    public function execute($path, $params, $data = [])
     {
         $id = explode('/', $path)[2];
-        $res = GameModel::getGame($id);
+        $res = $this->model->getGame($id);
 
         header('Content-Type: application/json');
 

@@ -19,7 +19,6 @@ class Router{
     // method: тип запроса (GET, POST и др.)
     // controller: название класса контроллера
     public function addRoute($method, $regexp, $controller){
-        $controller = $controller . "::execute";
         $regexp = $regexp . "i"; // регистронезависимый поиск
         $this->routes[] = [
             'regexp' => $regexp,
@@ -28,15 +27,15 @@ class Router{
         ];
     }
 
-    public function dispatch($method, $url, $data = []){
+    public function dispatch($method, $url, $data = null){
         $path = '';
         $params = [];
         // error_log($url);
         // error_log(strpos($url, '?'));
         if (strpos($url, '?') !== false){
-            $arr = explode('?', $url);
-            $path = $arr[0];
-            $params = $this->getParams($arr[1]);
+            $domains = explode('?', $url);
+            $path = $domains[0];
+            $params = $this->getParams($domains[1]);
         }
         else{
             $path = $url;
@@ -48,7 +47,7 @@ class Router{
             if (preg_match($route['regexp'], $path) === 1){
                 if ($route['method'] === strtoupper($method)){
                     $controllerFound = true;
-                    $route['controller']($path, $params, json_decode($data));
+                    $route['controller']->execute($path, $params, json_decode($data, true));
                     break;
                 }
             }

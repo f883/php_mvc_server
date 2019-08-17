@@ -3,11 +3,11 @@ require 'vendor/autoload.php';
 
 class GameModel
 {
-    private static $dbAddress = 'mongodb://192.168.101.160:32768';
+    private $dbAddress = 'mongodb://192.168.1.103:32768';
 
-    public static function addGame($data)
+    public function addGame($data)
     {
-        $client = new MongoDB\Client(GameModel::$dbAddress);
+        $client = new MongoDB\Client($this->dbAddress);
         $collection = $client->test_db->games;
 
         $filter = [];
@@ -16,22 +16,22 @@ class GameModel
         $id++;
 
         $result = $collection->insertOne(
-            ['id' => $id, 'name' => $data->name]
+            ['id' => $id, 'name' => $data['name']]
         );
         return $id;
     }
 
-    public static function changeGameData($data)
+    public function changeGameData($data)
     {
-        $client = new MongoDB\Client(GameModel::$dbAddress);
+        $client = new MongoDB\Client($this->dbAddress);
         $collection = $client->test_db->games;
-        $id = (int) $data->id;
+        $id = (int) $data['id'];
         $game = $collection->findOne(array('id' => $id));
         if (!is_null($game)) {
             $game = $collection->updateOne(
                 ['id' => $id],
                 ['$set' => [
-                    'name' => $data->name,
+                    'name' => $data['name'],
                 ],
                 ]
             );
@@ -39,26 +39,26 @@ class GameModel
             unset($game['_id']); // удаляем метку mongodb
             return $game;
         } else {
-            return false;
+            return null;
         }
     }
 
-    public static function getGame($id)
+    public function getGame($id)
     {
-        $client = new MongoDB\Client(GameModel::$dbAddress);
+        $client = new MongoDB\Client($this->dbAddress);
         $collection = $client->test_db->games;
         $game = $collection->findOne(['id' => (int) $id]);
         if (!is_null($game)) {
             unset($game['_id']); // удаляем метку mongodb
             return $game;
         } else {
-            return false;
+            return null;
         }
     }
 
-    public static function deleteGame($id)
+    public function deleteGame($id)
     {
-        $client = new MongoDB\Client(GameModel::$dbAddress);
+        $client = new MongoDB\Client($this->dbAddress);
         $collection = $client->test_db->games;
         $game = $collection->findOne(['id' => (int) $id]);
 
@@ -67,7 +67,7 @@ class GameModel
             unset($game['_id']); // удаляем метку mongodb
             return $game;
         } else {
-            return false;
+            return null;
         }
     }
 }
